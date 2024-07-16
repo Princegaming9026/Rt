@@ -3,7 +3,7 @@
     event.preventDefault();
 
     // Fetch keys from the external source
-    fetch('')
+    fetch('https://princegaming9026.github.io/keys-service/keys.json')
       .then(response => response.json())
       .then(data => {
         const keysArray = data.keys;
