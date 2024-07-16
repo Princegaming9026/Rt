@@ -1,0 +1,29 @@
+<script>
+  document.getElementById('loginForm').addEventListener('submit', function(event) {
+    event.preventDefault();
+
+    // Fetch keys from the external source
+    fetch('')
+      .then(response => response.json())
+      .then(data => {
+        const keysArray = data.keys;
+        const enteredKeys = document.getElementById('keys').value.split(",").map(key => key.trim());
+
+        // Check if entered keys match any of the keys from the external source
+        const isValid = enteredKeys.some(key => keysArray.includes(key));
+
+        if (isValid) {
+          document.getElementById('loginMessage').textContent = "Login successful!";
+          document.getElementById('loginMessage').style.color = "green";
+        } else {
+          document.getElementById('loginMessage').textContent = "Invalid keys. Please try again.";
+          document.getElementById('loginMessage').style.color = "red";
+        }
+      })
+      .catch(error => {
+        console.error('Error fetching keys:', error);
+        document.getElementById('loginMessage').textContent = "Error fetching keys. Please try again later.";
+        document.getElementById('loginMessage').style.color = "red";
+      });
+  });
+</script>
